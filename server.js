@@ -1,3 +1,5 @@
+// Add this temporary debugging code to your server.js to find the problematic route
+
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -5,107 +7,198 @@ require('dotenv').config();
 
 const app = express();
 
-// Middleware
+// CORS configuration
 app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+
+// Payload limits
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 // Request logging middleware
 app.use((req, res, next) => {
   console.log(`🔍 SERVER DEBUG - ${new Date().toISOString()} - ${req.method} ${req.path}`);
-  console.log('🔍 SERVER DEBUG - Headers:', JSON.stringify(req.headers, null, 2));
-  if (req.body && Object.keys(req.body).length > 0) {
-    console.log('🔍 SERVER DEBUG - Body keys:', Object.keys(req.body));
-    console.log('🔍 SERVER DEBUG - Body size:', JSON.stringify(req.body).length);
-  }
   next();
 });
 
 // MongoDB Connection
 const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/donor-project';
-console.log('🔍 DEBUG - Attempting to connect to MongoDB:', mongoUri.includes('mongodb.net') ? 'Atlas' : 'Local');
-
 mongoose.connect(mongoUri)
   .then(() => console.log('✅ Connected to MongoDB successfully'))
-  .catch(err => {
-    console.error('❌ MongoDB connection error:', err.message);
-    console.log('💡 TIP: If using Atlas, check IP whitelist. For local development, ensure MongoDB is installed and running.');
-  });
+  .catch(err => console.error('❌ MongoDB connection error:', err.message));
 
-// Basic route
+// Basic routes
 app.get('/', (req, res) => {
   res.json({
     message: 'Welcome to Donor Project API',
     version: '1.0.0',
     timestamp: new Date().toISOString(),
     status: 'active',
+    maxPayloadSize: '50MB'
   });
 });
 
-// Health check route
 app.get('/api/health', (req, res) => {
   res.json({
     status: 'healthy',
     timestamp: new Date().toISOString(),
     database: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected',
     uptime: process.uptime(),
+    maxPayloadSize: '50MB'
   });
 });
 
-// API info route
-app.get('/api', (req, res) => {
-  res.json({
-    message: 'Donor Project API v1.0.0',
-    endpoints: {
-      auth: '/api/auth',
-      cases: '/api/cases',
-      donations: '/api/donations',
-      admin: '/api/admin',
-      adminCheckerMgmt: '/api/admin/checker-management',
-      checker: '/api/checker',
-      files: '/api/files',
-      stats: '/api/stats',
-      health: '/api/health',
-    },
-    documentation: 'See README.md for detailed API documentation',
-  });
-});
+// ROUTE DEBUGGING: Add each route file one by one to isolate the problem
+console.log('🔍 Loading routes...');
 
-// Import routes
-const authRoutes = require('./routes/auth');
-const caseRoutes = require('./routes/cases');
-const donationRoutes = require('./routes/donations');
-const adminRoutes = require('./routes/admin');
-const adminCheckerMgmtRoutes = require('./routes/adminCheckerManagement');
-const fileRoutes = require('./routes/files');
-const statsRoutes = require('./routes/stats');
-const checkerRoutes = require('./routes/checker');
+try {
+  console.log('📁 Loading auth routes...');
+  const authRoutes = require('./routes/auth');
+  app.use('/api/auth', authRoutes);
+  console.log('✅ Auth routes loaded successfully');
+} catch (error) {
+  console.error('❌ Error loading auth routes:', error.message);
+  console.error('Stack:', error.stack);
+}
 
-// Import new admin routes
-const adminAuthRoutes = require('./routes/adminAuth');
-const adminDashboardRoutes = require('./routes/adminDashboard');
+try {
+  console.log('📁 Loading case routes...');
+  const caseRoutes = require('./routes/cases');
+  app.use('/api/cases', caseRoutes);
+  console.log('✅ Case routes loaded successfully');
+} catch (error) {
+  console.error('❌ Error loading case routes:', error.message);
+  console.error('Stack:', error.stack);
+}
 
-// Use routes
-app.use('/api/auth', authRoutes);
-app.use('/api/cases', caseRoutes);
-app.use('/api/donations', donationRoutes);
-app.use('/api/admin', adminRoutes); // Keep existing admin routes for compatibility
-app.use('/api/admin/checker-management', adminCheckerMgmtRoutes); // New checker management routes
-app.use('/api/files', fileRoutes);
-app.use('/api/stats', statsRoutes);
-app.use('/api/checker', checkerRoutes); // New checker routes
+try {
+  console.log('📁 Loading donation routes...');
+  const donationRoutes = require('./routes/donations');
+  app.use('/api/donations', donationRoutes);
+  console.log('✅ Donation routes loaded successfully');
+} catch (error) {
+  console.error('❌ Error loading donation routes:', error.message);
+  console.error('Stack:', error.stack);
+}
 
-// New secure admin routes
-app.use('/api/admin/auth', adminAuthRoutes);
-app.use('/api/admin/dashboard', adminDashboardRoutes);
+try {
+  console.log('📁 Loading admin routes...');
+  const adminRoutes = require('./routes/admin');
+  app.use('/api/admin', adminRoutes);
+  console.log('✅ Admin routes loaded successfully');
+} catch (error) {
+  console.error('❌ Error loading admin routes:', error.message);
+  console.error('Stack:', error.stack);
+}
+
+try {
+  console.log('📁 Loading admin checker management routes...');
+  const adminCheckerMgmtRoutes = require('./routes/adminCheckerManagement');
+  app.use('/api/admin/checker-management', adminCheckerMgmtRoutes);
+  console.log('✅ Admin checker management routes loaded successfully');
+} catch (error) {
+  console.error('❌ Error loading admin checker management routes:', error.message);
+  console.error('Stack:', error.stack);
+}
+
+try {
+  console.log('📁 Loading file routes...');
+  const fileRoutes = require('./routes/files');
+  app.use('/api/files', fileRoutes);
+  console.log('✅ File routes loaded successfully');
+} catch (error) {
+  console.error('❌ Error loading file routes:', error.message);
+  console.error('Stack:', error.stack);
+}
+
+try {
+  console.log('📁 Loading stats routes...');
+  const statsRoutes = require('./routes/stats');
+  app.use('/api/stats', statsRoutes);
+  console.log('✅ Stats routes loaded successfully');
+} catch (error) {
+  console.error('❌ Error loading stats routes:', error.message);
+  console.error('Stack:', error.stack);
+}
+
+try {
+  console.log('📁 Loading checker routes...');
+  const checkerRoutes = require('./routes/checker');
+  app.use('/api/checker', checkerRoutes);
+  console.log('✅ Checker routes loaded successfully');
+} catch (error) {
+  console.error('❌ Error loading checker routes:', error.message);
+  console.error('Stack:', error.stack);
+}
+
+// Try loading additional admin routes if they exist
+try {
+  console.log('📁 Loading admin auth routes...');
+  const adminAuthRoutes = require('./routes/adminAuth');
+  app.use('/api/admin/auth', adminAuthRoutes);
+  console.log('✅ Admin auth routes loaded successfully');
+} catch (error) {
+  console.error('❌ Error loading admin auth routes (might not exist):', error.message);
+}
+
+try {
+  console.log('📁 Loading admin dashboard routes...');
+  const adminDashboardRoutes = require('./routes/adminDashboard');
+  app.use('/api/admin/dashboard', adminDashboardRoutes);
+  console.log('✅ Admin dashboard routes loaded successfully');
+} catch (error) {
+  console.error('❌ Error loading admin dashboard routes (might not exist):', error.message);
+}
 
 // Error handling middleware
-app.use((err, req, res, _next) => {
-  console.error(err.stack);
-  res.status(500).json({ message: 'Something went wrong!' });
+app.use((err, req, res, next) => {
+  console.error('❌ SERVER ERROR:', err.stack);
+  
+  if (err.type === 'entity.too.large') {
+    return res.status(413).json({ 
+      message: 'Payload too large. Maximum size is 50MB.',
+      maxSize: '50MB',
+      error: 'PAYLOAD_TOO_LARGE'
+    });
+  }
+  
+  res.status(500).json({ 
+    message: 'Internal server error occurred',
+    error: 'INTERNAL_SERVER_ERROR',
+    ...(process.env.NODE_ENV === 'development' && { details: err.message })
+  });
 });
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`🚀 Server is running on port ${PORT}`);
+  console.log(`📋 All routes loaded successfully!`);
 });
+
+// COMMON ROUTE PATTERNS TO CHECK IN YOUR ROUTE FILES:
+
+/* 
+Check these files for invalid route patterns:
+
+1. routes/auth.js - Look for:
+   - router.get('/verify/:')  // Missing parameter name
+   - router.post('/reset-password/:token:') // Extra colon
+   
+2. routes/cases.js - Look for:
+   - router.get('/:caseId/comments/:') // Missing parameter name
+   - router.get('/::id') // Double colon
+   
+3. routes/admin.js - Look for:
+   - router.get('/cases/:caseId/:') // Missing parameter name
+   
+4. routes/adminCheckerManagement.js - Look for:
+   - router.get('/checkers/:checkerId/:') // Missing parameter name
+   
+5. Any route file - Look for patterns like:
+   - /:$/  (ending with colon)
+   - /::/  (double colon)
+   - /?/   (question mark in route path instead of query)
+   - /#/   (hash in route path)
+
+TO FIX: Replace the above server.js temporarily and run your server.
+The console will show exactly which route file is causing the problem.
+*/
