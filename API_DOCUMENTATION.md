@@ -1,8 +1,8 @@
-# 📋 **Donor Project API Documentation**
+# 📋 **Nahdat Watan | نهضة وطن API Documentation**
 
 ## 🚀 **Overview**
 
-This is the complete REST API for the South Lebanon Donor Project. The API provides endpoints for user authentication, case management, donation processing, and administrative functions.
+This is the complete REST API for Nahdat Watan | نهضة وطن. The API provides endpoints for user authentication, case management, donation processing, and administrative functions.
 
 **Base URL:** `http://localhost:5000/api`
 **Version:** 1.0.0
@@ -451,7 +451,7 @@ GET /api
 
 Response: 200 OK
 {
-  "message": "Donor Project API v1.0.0",
+  "message": "Nahdat Watan | نهضة وطن API v1.0.0",
   "endpoints": {
     "auth": "/api/auth",
     "cases": "/api/cases",
@@ -635,7 +635,7 @@ All endpoints return standardized error responses:
    node create-checker.js
    ```
    Default checker credentials:
-   - Email: `checker@donorproject.com`
+   - Email: `checker@nahdatwatan.com`
    - Password: `checker123`
 
 5. **Test API:**
@@ -710,4 +710,4 @@ const submitCase = async (caseData) => {
 
 ---
 
-This API provides a complete backend solution for the South Lebanon Donor Project, supporting all the functionality required by your React frontend.
+This API provides a complete backend solution for Nahdat Watan | نهضة وطن, supporting all the functionality required by your React frontend.

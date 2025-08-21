@@ -29,7 +29,7 @@ mongoose.connect(mongoUri)
 // Basic routes
 app.get('/', (req, res) => {
   res.json({
-    message: 'Welcome to Donor Project API',
+    message: 'Welcome to Nahdat Watan | نهضة وطن API',
     version: '1.0.0',
     timestamp: new Date().toISOString(),
     status: 'active',

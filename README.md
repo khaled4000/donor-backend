@@ -1,6 +1,6 @@
-# Donor Project Backend
+# Nahdat Watan | نهضة وطن Backend
 
-Express.js server with MongoDB database for the Donor Project.
+Express.js server with MongoDB database for Nahdat Watan | نهضة وطن.
 
 ## Setup Instructions
 
@@ -17,7 +17,7 @@ npm install
 
 2. Create a `.env` file in the root directory with the following variables:
 ```
-MONGODB_URI=mongodb://localhost:27017/donor-project
+MONGODB_URI=mongodb://localhost:27017/nahdat-watan
 JWT_SECRET=your_jwt_secret_key_here
 PORT=5000
 ```
