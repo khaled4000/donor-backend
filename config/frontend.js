@@ -1,10 +1,11 @@
+// backend/config/frontend.js
 module.exports = {
   // Frontend URL for email verification links
-  // Use local IP address so mobile devices can access it
-  FRONTEND_URL: process.env.FRONTEND_URL || "http://192.168.56.1:5173",
+  // Use environment variable for production, fallback to localhost for development
+  FRONTEND_URL: process.env.FRONTEND_URL || "http://localhost:3000",
   // Available environments
   ENVIRONMENTS: {
-    development: "http://192.168.56.1:5173", // Use local IP for mobile access
+    development: "http://localhost:3000", // Use localhost for development
     production: process.env.FRONTEND_URL || "https://yourdomain.com",
   },
 };

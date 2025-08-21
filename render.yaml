@@ -1,0 +1,47 @@
+services:
+  - type: web
+    name: donor-project-backend
+    env: node
+    region: oregon
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      # Environment
+      - key: NODE_ENV
+        value: production
+      
+      # Database - Set this in Render dashboard
+      - key: MONGODB_URI
+        sync: false
+        
+      # Security - Set this in Render dashboard
+      - key: JWT_SECRET
+        sync: false
+        
+      # Email Service - Choose one option below
+      # Option 1: SendGrid (recommended)
+      - key: SENDGRID_API_KEY
+        sync: false
+        
+      # Option 2: Traditional SMTP (alternative)
+      - key: EMAIL_HOST
+        sync: false
+      - key: EMAIL_USER
+        sync: false
+      - key: EMAIL_PASS
+        sync: false
+      - key: EMAIL_PORT
+        value: "587"
+      - key: EMAIL_FROM
+        sync: false
+        
+      # Frontend URL - Set this in Render dashboard
+      - key: FRONTEND_URL
+        sync: false
+        
+      # Port (Render sets this automatically)
+      - key: PORT
+        value: "5000"
