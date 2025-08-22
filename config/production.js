@@ -12,7 +12,7 @@ module.exports = {
     
     // CORS settings for production
     cors: {
-      origin: process.env.FRONTEND_URL || 'https://yourdomain.com',
+      origin: process.env.FRONTEND_URL || 'https://donor-frontend1.onrender.com',
       credentials: true,
       optionsSuccessStatus: 200,
     },

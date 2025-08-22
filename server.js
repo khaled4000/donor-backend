@@ -17,6 +17,7 @@ const corsOptions = {
       'http://localhost:5173', // Development
       'http://localhost:3000', // Alternative development port
       'https://donor-frontend-jszc-git-master-khaled4000s-projects.vercel.app', // Vercel frontend
+      'https://donor-frontend1.onrender.com', // Render frontend
       process.env.FRONTEND_URL // Production frontend URL (fallback)
     ].filter(Boolean); // Remove undefined values
     

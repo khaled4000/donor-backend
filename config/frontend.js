@@ -6,6 +6,6 @@ module.exports = {
   // Available environments
   ENVIRONMENTS: {
     development: "http://localhost:5173", // Use localhost for development
-    production: process.env.FRONTEND_URL || "https://yourdomain.com",
+    production: process.env.FRONTEND_URL || "https://donor-frontend1.onrender.com",
   },
 };
