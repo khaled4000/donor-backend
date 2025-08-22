@@ -7,29 +7,22 @@ Create a `.env` file in your backend directory with these variables:
 
 ```bash
 # Database
-MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/donor-project
+MONGODB_URI=your_mongodb_connection_string
 
-# Security
-JWT_SECRET=your_very_long_random_secret_key_at_least_32_characters
+# JWT Secret
+JWT_SECRET=your_jwt_secret_key
 
-# Email Service (Choose ONE option)
-
-# Option 1: SendGrid (Recommended)
-SENDGRID_API_KEY=your_sendgrid_api_key
-
-# Option 2: Traditional SMTP
+# Email Configuration
 EMAIL_HOST=smtp.gmail.com
 EMAIL_USER=your_email@gmail.com
 EMAIL_PASS=your_app_password
-EMAIL_FROM=noreply@yourdomain.com
-EMAIL_PORT=587
+EMAIL_FROM=noreply@donor-frontend1.onrender.com
 
 # Frontend URL
-FRONTEND_URL=https://your-frontend-domain.com
+FRONTEND_URL=https://donor-frontend1.onrender.com
 
 # Environment
 NODE_ENV=production
-PORT=5000
 ```
 
 ### 2. Database Setup
@@ -129,14 +122,44 @@ In Render dashboard, set these environment variables:
    - Verify FRONTEND_URL is set correctly
    - Check CORS configuration in server.js
 
+### 3. CORS Configuration
+Ensure your backend accepts requests from your frontend domain:
+
+```javascript
+// In server.js or your CORS configuration
+const allowedOrigins = [
+  'http://localhost:5173', // Development
+  'http://localhost:3000', // Alternative development
+  'https://donor-frontend1.onrender.com', // Production frontend
+  process.env.FRONTEND_URL // Environment variable fallback
+];
+```
+
+**Verify these settings:**
+- [ ] `FRONTEND_URL` - Your production frontend URL
+- [ ] CORS origins include your frontend domain
+- [ ] Credentials are enabled for authentication
+
 ## 📱 Frontend Integration
 
-After backend deployment:
+### 1. Frontend Configuration
+Update your frontend environment variables:
 
-1. Update frontend API base URL to your Render backend URL
-2. Test all API calls from frontend
-3. Verify authentication flow works
-4. Test file uploads and downloads
+```bash
+# Production environment
+VITE_API_BASE_URL=https://donor-backend-dxxd.onrender.com/api
+VITE_FRONTEND_URL=https://donor-frontend1.onrender.com
+```
+
+### 2. Backend CORS
+Ensure your backend accepts requests from:
+- `https://donor-frontend1.onrender.com` (production)
+- `http://localhost:5173` (development)
+
+### 3. Email Verification Links
+Email verification and password reset links will now point to:
+- **Production**: `https://donor-frontend1.onrender.com/verify-email`
+- **Development**: `http://localhost:5173/verify-email`
 
 ## 🔒 Security Checklist
 
@@ -156,3 +179,27 @@ After backend deployment:
 ---
 
 **Need Help?** Check Render documentation or your application logs for specific error messages.
+
+## ✅ Verification
+
+### 1. Backend Health
+- [ ] Backend responds at `https://donor-backend-dxxd.onrender.com/api/health`
+- [ ] Database connection is active
+- [ ] All routes are accessible
+
+### 2. Frontend Integration
+- [ ] Frontend connects to backend API
+- [ ] Authentication flow works
+- [ ] Email verification links work
+- [ ] CORS issues resolved
+
+### 3. Email Service
+- [ ] Verification emails sent with correct frontend URL
+- [ ] Password reset emails work
+- [ ] Welcome emails sent to new users
+
+### 4. Final Checks
+- [ ] Verify FRONTEND_URL is set correctly
+- [ ] Test complete user registration flow
+- [ ] Test admin and checker functionality
+- [ ] Monitor backend logs for errors
