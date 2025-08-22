@@ -16,7 +16,8 @@ const corsOptions = {
     const allowedOrigins = [
       'http://localhost:5173', // Development
       'http://localhost:3000', // Alternative development port
-      'https://donor-frontend1.onrender.com', // Render frontend
+      'https://donor-project-frontend-3utdst4fo-khaled4000s-projects.vercel.app', // Vercel frontend
+      'https://donor-frontend1.onrender.com', // Render frontend (fallback)
       process.env.FRONTEND_URL // Production frontend URL (fallback)
     ].filter(Boolean); // Remove undefined values
     

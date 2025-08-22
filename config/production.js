@@ -12,7 +12,7 @@ module.exports = {
     
     // CORS settings for production
     cors: {
-      origin: process.env.FRONTEND_URL || 'https://donor-frontend1.onrender.com',
+      origin: process.env.FRONTEND_URL || 'https://donor-project-frontend-3utdst4fo-khaled4000s-projects.vercel.app',
       credentials: true,
       optionsSuccessStatus: 200,
     },
